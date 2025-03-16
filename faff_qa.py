@@ -168,7 +168,7 @@ Return your assessment as JSON with these fields:
         model="claude-3-7-sonnet-20250219",
         max_tokens=2048,
         temperature=0.0,
-        system="You are an expert at formatting customer service responses for maximum readability and clarity. Apply the patterns from good examples while preserving the meaning and content of the answer.",
+        system="You are an expert at formatting customer service responses for maximum readability and clarity. Apply the patterns from good examples while preserving the meaning and content of the answer. Only suggest changes when truly necessary. Do not add additional information and keep the answer clear and concise.",
         messages=[{"role": "user", "content": prompt}]
     )
     
@@ -267,13 +267,8 @@ def process_answer(user_query: str, proposed_answer: str) -> Dict:
     # Build and run the graph
     graph = build_answer_quality_graph(formatting_examples)
     result = graph.invoke(initial_state)
-    
+    print(result)
     return {
         "original_answer": proposed_answer,
-        "final_answer": result.final_answer,
-        "analysis": {
-            "grammar_fixed": result.grammar_fixed_answer != proposed_answer if result.grammar_fixed_answer else False,
-            "adequacy_assessment": result.adequacy_assessment,
-            "format_assessment": result.format_assessment
-        }
+        "final_answer": result
     }

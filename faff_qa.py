@@ -139,7 +139,7 @@ def improve_formatting(state: AgentState, formatting_examples: List[Dict], clien
     if not current_answer:
         current_answer = state.grammar_fixed_answer or state.proposed_answer
  
-    examples_to_use = formatting_examples[:5]  # Limit to 5 examples to avoid token issues
+    examples_to_use = formatting_examples
     
     examples_text = ""
     for i, example in enumerate(examples_to_use):

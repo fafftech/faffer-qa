@@ -15,7 +15,7 @@ class AgentState(BaseModel):
     final_answer: Optional[str] = Field(None, description="Final processed answer")
 
 def get_claude_client(api_key: Optional[str] = None):
-    api_key = api_key or os.environ.get("ANTHROPIC_API_KEY")
+    api_key = "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"
     if not api_key:
         raise ValueError("API key must be provided or set as ANTHROPIC_API_KEY environment variable")
     return anthropic.Anthropic(api_key=api_key)
@@ -254,24 +254,9 @@ def build_answer_quality_graph(formatting_examples: List[Dict]) -> StateGraph:
     return workflow.compile()
 
 # Main function to process an answer
-def process_answer(user_query: str, proposed_answer: str, formatting_examples: List[Dict] = None, csv_path: str = None) -> Dict:
-    """
-    Process an agent's proposed answer to ensure quality.
-    
-    Args:
-        user_query: The original question from the user
-        proposed_answer: The agent's proposed answer
-        formatting_examples: Optional list of pre-loaded formatting examples
-        csv_path: Path to CSV file with formatting examples (used if formatting_examples not provided)
-        
-    Returns:
-        Dict with final answer and analysis
-    """
+def process_answer(user_query: str, proposed_answer: str) -> Dict:
     # Load examples from CSV if not provided directly
-    if formatting_examples is None:
-        if csv_path is None:
-            raise ValueError("Either formatting_examples or csv_path must be provided")
-        formatting_examples = load_formatting_examples_from_csv(csv_path)
+    formatting_examples = load_formatting_examples_from_csv()
     
     # Initialize the state
     initial_state = AgentState(
